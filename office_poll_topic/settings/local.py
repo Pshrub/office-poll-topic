@@ -9,6 +9,10 @@ from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'i@de#z&xhk6^v-9joseaxc55fq*s*x&-d#yg8hs^ii@%w74w)$'
+
+
 
 DATABASES = {
     'default': {
