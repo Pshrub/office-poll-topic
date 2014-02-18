@@ -30,19 +30,19 @@ class UserAdmin(admin.ModelAdmin):
         (None, {'fields': ['first_name']}),
         (None, {'fields': ['last_name']}),
         (None, {'fields': ['is_active']}),
-        (None, {'fields': ['is_adminj']}),
+        (None, {'fields': ['is_admin']}),
     ]
     list_display = ('email_address','first_name', 'last_name')
     search_fields = ['email_address']
     
 class VoteAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['question_value']}),
+#        (None, {'fields': ['question_value']}),
         (None, {'fields': ['answer_value']}),
         (None, {'fields': ['voter']}),
         (None, {'fields': ['answer_timestamp']}),
     ]
-    list_display = ('question_value','voter','answer_value', 'answer_timestamp')
+    list_display = ('voter','answer_value', 'answer_timestamp')
     search_fields = ['voter']
     
     

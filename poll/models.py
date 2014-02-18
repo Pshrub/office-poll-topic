@@ -33,10 +33,9 @@ class Answers(models.Model):
     def __unicode__(self):
         return self.answer_text
 
-# look into changing the FK definition for question from Questions to the question value in Answers
+
 # look into setting an automatic value for the timestamp to now
 class Votes(models.Model):
-    question_value = models.ForeignKey(Questions)
     answer_value = models.ForeignKey(Answers)
     voter = models.ForeignKey(Users)
     answer_timestamp = models.DateTimeField()
