@@ -1,0 +1,8 @@
+<h1>{{ poll.question_text }}</h1>
+
+<ul>
+{% for answer in poll.answers_set.all  %}
+    <li>{{ answer.answer_text  }}</li>
+{% endfor  %}
+</ul>
+
