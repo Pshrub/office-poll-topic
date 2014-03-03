@@ -1,9 +1,12 @@
 <h1>{{ poll.question_text }}</h1>
 <h2>display votes here. maybe as a chart but start with a list</h2>
+<h2>{{ poll.id }}</h2>
 <ul>
 {% for answers in poll.answers_set.all %}
     <li>{{ answers.answer_text }}</li>
 {% endfor %}
 </ul>
 <br>
-<p>Thanks for your vote.</p><a href="http://www.bing.com">Enjoy a cool pic</a>
+<p>Thanks for your vote.</p>
+<br>
+<a href="{% url 'poll:index'  %}">Return to the list of poll topics</a>
