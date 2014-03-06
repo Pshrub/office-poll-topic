@@ -41,7 +41,7 @@ class Votes(models.Model):
     answer_timestamp = models.DateTimeField()
 
     def __unicode__(self):
-        return str(self.answer_value) + ' ' +  str(self.voter)
+        return str(self.answer_value)
 
 
 class Users_Questions_Hash(models.Model):

@@ -5,9 +5,6 @@ from django.utils import timezone
 from poll.models import Questions, Answers, Votes, Users
 
 
-# Create your views here.
-
-
 def index(request):
     recent_question_list = Questions.objects.all().order_by('-end_date')
     context = { 'recent_question_list': recent_question_list }
@@ -60,5 +57,9 @@ def vote(request, poll_id):
         v = Votes(answer_value=selected_choice,voter=Users.objects.get(id=3),answer_timestamp=timezone.now() )
         v.save()
 
+# http://stackoverflow.com/questions/17001638/iteration-in-templates
+# look here to explain what to do to pass the filter of this to the template
+# so it is available with syntax like this: for answers in poll.answers_set.all
+# for answers in Votes.objects.filter(answer_value_id__question_id__id = poll.id)
     
     return HttpResponseRedirect(reverse('poll:results', args=(p.id,) ) )
