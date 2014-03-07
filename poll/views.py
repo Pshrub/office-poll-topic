@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
@@ -40,7 +40,9 @@ def detail(request, poll_id):
 
 def results(request, poll_id):
     poll = get_object_or_404(Questions, pk=poll_id)
-    return render(request, 'poll/results.html', {'poll': poll} )
+#    allvotes = Votes.objects.filter(answer_value_id__question_id__id = poll_id)
+    allvotes = get_list_or_404(Votes.objects.filter(answer_value_id__question_id__id=poll_id ) )
+    return render(request, 'poll/results.html', {'allvotes': allvotes} )
 
 def vote(request, poll_id):
     p = get_object_or_404(Questions, pk=poll_id)

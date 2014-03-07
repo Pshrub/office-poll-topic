@@ -1,11 +1,20 @@
-<h1>{{ poll.question_text }}</h1>
+{# display the results here #}
+<h1>{{ allvotes.question_text }}</h1>
 <h2>display votes here. maybe as a chart but start with a list</h2>
-<h2>{{ poll.id }}</h2>
+
+
 <ul>
-{% for answers in poll.answers_set.all %}
-    <li>{{ answers.answer_text }}</li>
+{% for answers in allvotes %}
+    <li>{{ answers.answer_value }}</li>
 {% endfor %}
 </ul>
+<br>
+<ul>
+{% for answers in allvotes %}
+    <li>{{ answers.answer_value }} -- {{ forloop.counter }}</li>
+{% endfor %}
+</ul>
+
 <br>
 <p>Thanks for your vote.</p>
 <br>
