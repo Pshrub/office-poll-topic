@@ -1,20 +1,17 @@
 {# display the results here #}
-<h1>{{ allvotes.question_text }}</h1>
-<h2>display votes here. maybe as a chart but start with a list</h2>
-
+<h1>{{ poll.question_text }}</h1>
+{% if messages %}
+    {% for message in messages %}
+    <h2{% if message.tags %} class="{{ message.tags }}"{% endif %}>You selected the answer: {{ message }}</h2>
+    <h2>Here are the current results</h2>
+    {% endfor %}
+{% endif %}
 
 <ul>
 {% for answers in allvotes %}
     <li>{{ answers.answer_value }}</li>
 {% endfor %}
 </ul>
-<br>
-<ul>
-{% for answers in allvotes %}
-    <li>{{ answers.answer_value }} -- {{ forloop.counter }}</li>
-{% endfor %}
-</ul>
-
 <br>
 <p>Thanks for your vote.</p>
 <br>

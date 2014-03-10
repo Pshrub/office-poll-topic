@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.contrib import messages
 from poll.models import Questions, Answers, Votes, Users
 
 
@@ -27,12 +28,6 @@ def index(request):
 # selected choice.
 
 #In [19]: v = Votes(answer_value=Answers.objects.get(id=1),voter=Users.objects.get(id=2),answer_timestamp=timezone.now() )
-#In [20]: v
-#Out[20]: <Votes: Europe pittfagan@yahoo.com>
-#In [21]: v.save()
-#In [22]: Votes.objects.all()
-#Out[22]: [<Votes: Never had one fagan@earthlinginteractive.com>, <Votes: No pittfagan@yahoo.com>, <Votes: Yes pittfagan@gmail.com>, <Votes: Europe pittfagan@yahoo.com>]
-#v1 = Votes.objects.filter(answer_value__answer_text__exact='Yes') 
 
 def detail(request, poll_id):
     poll = get_object_or_404(Questions, pk=poll_id)
@@ -40,9 +35,8 @@ def detail(request, poll_id):
 
 def results(request, poll_id):
     poll = get_object_or_404(Questions, pk=poll_id)
-#    allvotes = Votes.objects.filter(answer_value_id__question_id__id = poll_id)
     allvotes = get_list_or_404(Votes.objects.filter(answer_value_id__question_id__id=poll_id ) )
-    return render(request, 'poll/results.html', {'allvotes': allvotes} )
+    return render(request, 'poll/results.html', {'allvotes': allvotes, 'poll': poll} )
 
 def vote(request, poll_id):
     p = get_object_or_404(Questions, pk=poll_id)
@@ -58,7 +52,7 @@ def vote(request, poll_id):
     else:
         v = Votes(answer_value=selected_choice,voter=Users.objects.get(id=3),answer_timestamp=timezone.now() )
         v.save()
-
+        messages.add_message(request, messages.INFO, selected_choice)
 # http://stackoverflow.com/questions/17001638/iteration-in-templates
 # look here to explain what to do to pass the filter of this to the template
 # so it is available with syntax like this: for answers in poll.answers_set.all

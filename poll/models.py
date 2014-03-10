@@ -13,7 +13,8 @@ class Users(models.Model):
     def __unicode__(self):
         return self.email_address
     
-
+# add a method here called get_results(self, poll_id) and return the results of the v_votecount view
+# if this works do the aggregation in the method itself
 class Questions(models.Model):
     QUESTION_TYPE = ( ('multi-choice','multiple choice'), ('essay','free-form essay'), )
     poll_title = models.CharField(max_length=50)
@@ -34,7 +35,6 @@ class Answers(models.Model):
         return self.answer_text
 
 
-# look into setting an automatic value for the timestamp to now
 class Votes(models.Model):
     answer_value = models.ForeignKey(Answers)
     voter = models.ForeignKey(Users)
