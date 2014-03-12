@@ -1,9 +1,21 @@
 <h1>Here is a list of the most current polls</h1>
 {% if recent_question_list %}
-    <ul>
+    <table border="2">
+    <tr>
+        <th>Poll Title</th>
+        <th>Poll Start Date</th>
+        <th>Poll End Date</th>
+        <th>Start the Poll</th>
+    </tr>
+    <tr>
     {% for question in recent_question_list  %}
-        <li><a href="{% url 'poll:detail' question.id %}">{{ question.poll_title }}</a>{{ question.start_time  }}</li>
+        <td><a href="{% url 'poll:detail' question.id %}">{{ question.poll_title }}</a>{{ question.start_time  }}</td>
+        <td>{{ question.begin_date }}</td>
+        <td>{{ question.end_date }}</td>
+        <td>Put button here to send out the email</td>
+    </tr>
     {% endfor %}
+</table>
 {% else %}
     <p>No polls exist yet</p>
 {% endif %}
