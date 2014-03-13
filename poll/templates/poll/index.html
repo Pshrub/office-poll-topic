@@ -12,7 +12,8 @@
         <td><a href="{% url 'poll:detail' question.id %}">{{ question.poll_title }}</a>{{ question.start_time  }}</td>
         <td>{{ question.begin_date }}</td>
         <td>{{ question.end_date }}</td>
-        <td>Put button here to send out the email</td>
+        <td><form action="" method="post" style="margin: 0; text-align: center;">
+        {% csrf_token %}<input type="submit" value="SendEmails"></form></td>
     </tr>
     {% endfor %}
 </table>
