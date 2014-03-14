@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 
 # Create your models here.
 
@@ -13,8 +14,7 @@ class Users(models.Model):
     def __unicode__(self):
         return self.email_address
     
-# add a method here called get_results(self, poll_id) and return the results of the v_votecount view
-# if this works do the aggregation in the method itself
+
 class Questions(models.Model):
     QUESTION_TYPE = ( ('multi-choice','multiple choice'), ('essay','free-form essay'), )
     poll_title = models.CharField(max_length=50)
@@ -22,6 +22,10 @@ class Questions(models.Model):
     question_type = models.CharField(max_length=25, choices=QUESTION_TYPE)
     begin_date = models.DateTimeField()
     end_date = models.DateTimeField()
+
+    def get_poll_results(self, poll_id):
+        return Votes.objects.filter(answer_value__question__id = poll_id).values('answer_value') \
+        .annotate(vote_count=Count('answer_value'))
 
     def __unicode__(self):
         return self.question_text
