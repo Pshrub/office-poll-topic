@@ -9,14 +9,16 @@
     </tr>
     <tr>
     {% for question in recent_question_list  %}
-        <td><a href="{% url 'poll:detail' question.id %}">{{ question.poll_title }}</a>{{ question.start_time  }}</td>
+        <td><a href="{% url 'poll:detail' question.id %}">{{ question.poll_title }}</a>{{ question.start_time }}</td>
         <td>{{ question.begin_date }}</td>
         <td>{{ question.end_date }}</td>
-        <td><form action="" method="post" style="margin: 0; text-align: center;">
-        {% csrf_token %}<input type="submit" value="SendEmails"></form></td>
+        <td><form action=""  method="post" style="margin: 0; text-align: center;">
+        {% csrf_token %}<input type="submit" value="Send Emails" /></form></td>
     </tr>
     {% endfor %}
 </table>
 {% else %}
     <p>No polls exist yet</p>
 {% endif %}
+
+{# {% url 'poll:sendemail' poll.id %} #}

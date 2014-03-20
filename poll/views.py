@@ -3,7 +3,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib import messages
-from poll.models import Questions, Answers, Votes, Users
+import hashlib
+from random import randint
+from poll.models import Questions, Answers, Votes, Users, Users_Questions_Hash
 
 
 def index(request):
@@ -53,9 +55,20 @@ def vote(request, poll_id):
         v = Votes(answer_value=selected_choice,voter=Users.objects.get(id=3),answer_timestamp=timezone.now() )
         v.save()
         messages.add_message(request, messages.INFO, selected_choice)
-# http://stackoverflow.com/questions/17001638/iteration-in-templates
-# look here to explain what to do to pass the filter of this to the template
-# so it is available with syntax like this: for answers in poll.answers_set.all
-# for answers in Votes.objects.filter(answer_value_id__question_id__id = poll.id)
     
     return HttpResponseRedirect(reverse('poll:results', args=(p.id,) ) )
+
+
+def sendemail(request, poll_id):
+    unames = Users.objects.filter(is_active=1)
+    p = get_object_or_404(Questions, pk=poll_id)
+    for name in unames:
+        rnum = random.randint(1,1000)
+        val = str(unames) + str(p) + str(rnum)
+        s = hashlib.sha1(val).hexdigest()
+        e = Users_Questions_Hash(voter=1, question=p.id, hash=s, isvalid=1)
+        e.save()
+
+    return HttpResponseRedirect(reverse('poll:index') )
+
+# http://stackoverflow.com/questions/16298598/noreversematch-at

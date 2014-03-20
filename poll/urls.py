@@ -11,4 +11,6 @@ urlpatterns = patterns('',
     url(r'^(?P<poll_id>\d+)/results/$', views.results, name='results'),
     # ex: poll/1/vote
     url(r'^(?P<poll_id>\d+)/vote/$', views.vote, name='vote'),
+    # ex: poll/1/sendemail here is the view to send the emails for a given poll
+    url(r'^(?P<poll_id>\d+)/sendemail/$', views.sendemail, name='sendemail'),
 )
