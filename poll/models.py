@@ -1,8 +1,6 @@
 from django.db import models
 from django.db.models import Count
 
-# Create your models here.
-
 
 class Users(models.Model):
     first_name = models.CharField(max_length=25)
@@ -23,6 +21,10 @@ class Questions(models.Model):
     begin_date = models.DateTimeField()
     end_date = models.DateTimeField()
 
+# think about a way to ge the actual answer value as part of this method.
+# right now returns the answer value id. possibly query for the answer values 
+# and the answer text and put it together with the answer counts
+# https://docs.djangoproject.com/en/1.6/topics/db/queries/#backwards-related-objects
     def get_poll_results(self, poll_id):
         return Votes.objects.filter(answer_value__question__id = poll_id).values('answer_value') \
         .annotate(vote_count=Count('answer_value'))

@@ -8,6 +8,11 @@
 {% endif %}
 
 <ul>
+{% for answers in allvotes2 %}
+    <li>{{ answers.answer_value }} : {{ answers.vote_count }}</li>
+{% endfor %}
+<br>
+<ul>
 {% for answers in allvotes %}
     <li>{{ answers.answer_value }}</li>
 {% endfor %}

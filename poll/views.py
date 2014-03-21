@@ -37,8 +37,9 @@ def detail(request, poll_id):
 
 def results(request, poll_id):
     poll = get_object_or_404(Questions, pk=poll_id)
+    allvotes2 = poll.get_poll_results(poll_id)
     allvotes = get_list_or_404(Votes.objects.filter(answer_value_id__question_id__id=poll_id ) )
-    return render(request, 'poll/results.html', {'allvotes': allvotes, 'poll': poll} )
+    return render(request, 'poll/results.html', {'allvotes': allvotes, 'allvotes2': allvotes2, 'poll': poll} )
 
 def vote(request, poll_id):
     p = get_object_or_404(Questions, pk=poll_id)
@@ -72,3 +73,5 @@ def sendemail(request, poll_id):
     return HttpResponseRedirect(reverse('poll:index') )
 
 # http://stackoverflow.com/questions/16298598/noreversematch-at
+# http://stackoverflow.com/questions/1779463/noreversematch-in-django
+
