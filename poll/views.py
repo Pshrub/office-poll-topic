@@ -64,13 +64,16 @@ def sendemail(request, poll_id):
     unames = Users.objects.filter(is_active=1)
     p = get_object_or_404(Questions, pk=poll_id)
     for name in unames:
+        uid = Users.objects.get(email_address=name)
         rnum = random.randint(1,1000)
         val = str(unames) + str(p) + str(rnum)
         s = hashlib.sha1(val).hexdigest()
-        e = Users_Questions_Hash(voter=1, question=p.id, hash=s, isvalid=1)
+        e = Users_Questions_Hash(voter=uid.id, question=p.id, hash=s, isvalid=1)
         e.save()
 
-    return HttpResponseRedirect(reverse('poll:index') )
+    return HttpResponseRedirect(reverse('poll:index', args=(p.id,) ) )
+
+
 
 # http://stackoverflow.com/questions/16298598/noreversematch-at
 # http://stackoverflow.com/questions/1779463/noreversematch-in-django
