@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.core.mail import send_email
 from django.utils import timezone
+from django.forms import ModelForm
 from django.contrib import messages
 import hashlib
 from random import randint
@@ -71,7 +73,7 @@ def sendemail(request, poll_id):
         e = Users_Questions_Hash(voter=uid.id, question=p.id, hash=s, isvalid=1)
         e.save()
 
-    return HttpResponseRedirect(reverse('poll:index', args=(p.id,) ) )
+    return HttpResponseRedirect(reverse('poll:index' ) )
 
 
 

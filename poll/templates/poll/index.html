@@ -13,8 +13,8 @@
         <td><a href="{% url 'poll:detail' question.id %}">{{ question.poll_title }}</a>{{ question.start_time }}</td>
         <td>{{ question.begin_date }}</td>
         <td>{{ question.end_date }}</td>
-        <td><form action=""  method="post" style="margin: 0; text-align: center;">
-        {% csrf_token %}<input type="submit" value="Send Emails" /></form></td>
+        <td><form action="{% url 'poll:sendemail' poll.id %}"  method="post" style="margin: 0; text-align: center;">
+        {% csrf_token %}<input type="submit" value="Send Email" /></form></td>
     </tr>
     {% endfor %}
 </table>
@@ -23,3 +23,4 @@
 {% endif %}
 
 
+<!-- <form action="{% url 'poll:vote' poll.id %}" method="post"> -->
