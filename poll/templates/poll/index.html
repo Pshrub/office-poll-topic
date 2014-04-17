@@ -10,14 +10,18 @@
         <th>Poll End Date</th>
         <th>Start the Poll</th>
     </tr>
-    <tr class="{% cycle 'oddrow' 'evenrow'  %}" >
+    <tr>
     {% for question in recent_question_list  %}
+{#      {% if question.end_date >= now %} #}
         <td><a href="{% url 'poll:detail' question.id %}">{{ question.poll_title }}</a>{{ question.start_time }}</td>
         <td>{{ question.begin_date }}</td>
         <td>{{ question.end_date }}</td>
         <td><form action="{% url 'poll:sendemail' question.id %}"  method="post" style="margin: 0; text-align: center;">
         {% csrf_token %}<input type="submit" value="Send Email" /></form></td>
     </tr>
+{#      {% else %} #}
+{#        <td>&nbsp</td> #}
+{#      {% endif %} #}
     {% endfor %}
 </table>
 {% else %}
