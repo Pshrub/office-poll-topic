@@ -1,4 +1,6 @@
-<!-- {extends base.html}  -->
+<!-- index.html -->
+{% extends "base.html" %}
+{%  block content %}  
 <h2>Here is a list of the most current polls</h2>
 {% if recent_question_list %}
     <table border="2">
@@ -8,12 +10,12 @@
         <th>Poll End Date</th>
         <th>Start the Poll</th>
     </tr>
-    <tr>
+    <tr class="{% cycle 'oddrow' 'evenrow'  %}" >
     {% for question in recent_question_list  %}
         <td><a href="{% url 'poll:detail' question.id %}">{{ question.poll_title }}</a>{{ question.start_time }}</td>
         <td>{{ question.begin_date }}</td>
         <td>{{ question.end_date }}</td>
-        <td><form action="{% url 'poll:sendemail' poll.id %}"  method="post" style="margin: 0; text-align: center;">
+        <td><form action="{% url 'poll:sendemail' question.id %}"  method="post" style="margin: 0; text-align: center;">
         {% csrf_token %}<input type="submit" value="Send Email" /></form></td>
     </tr>
     {% endfor %}
@@ -22,5 +24,5 @@
     <p>No polls exist yet</p>
 {% endif %}
 
+{% endblock %}
 
-<!-- <form action="{% url 'poll:vote' poll.id %}" method="post"> -->

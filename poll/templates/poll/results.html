@@ -1,9 +1,12 @@
 {# display the results here #}
-<h1>{{ poll.question_text }}</h1>
+<!-- results.html -->
+{% extends "base.html" %}
+{%  block content %} 
+<h2>{{ poll.question_text }}</h2>
 {% if messages %}
     {% for message in messages %}
-    <h2{% if message.tags %} class="{{ message.tags }}"{% endif %}>You selected the answer: {{ message }}</h2>
-    <h2>Here are the current results</h2>
+    <h3{% if message.tags %} class="{{ message.tags }}"{% endif %}>You selected the answer: {{ message }}</h3>
+    <h3>Here are the current results</h3>
     {% endfor %}
 {% endif %}
 
@@ -21,3 +24,6 @@
 <p>Thanks for your vote.</p>
 <br>
 <a href="{% url 'poll:index'  %}">Return to the list of poll topics</a>
+
+{% endblock %}
+

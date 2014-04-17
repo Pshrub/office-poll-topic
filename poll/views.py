@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.core.mail import send_email
+# from django.core.mail import send_email
 from django.utils import timezone
 from django.forms import ModelForm
 from django.contrib import messages
 import hashlib
-from random import randint
+import random
+#from random import randint
 from poll.models import Questions, Answers, Votes, Users, Users_Questions_Hash
 
 
@@ -70,13 +71,13 @@ def sendemail(request, poll_id):
         rnum = random.randint(1,1000)
         val = str(unames) + str(p) + str(rnum)
         s = hashlib.sha1(val).hexdigest()
-        e = Users_Questions_Hash(voter=uid.id, question=p.id, hash=s, isvalid=1)
+#        e = Users_Questions_Hash(voter=int(uid.id), question=p.id, hash=s, isvalid=1) LOOK AT VOTER REFERENCE ABOVE
+        e = Users_Questions_Hash(voter=Users.objects.get(id=2), question=p.id, hash=s, isvalid=1)
         e.save()
 
-    return HttpResponseRedirect(reverse('poll:index' ) )
+    return HttpResponseRedirect(reverse('poll:index', args=(p.id,) ) )
 
 
 
-# http://stackoverflow.com/questions/16298598/noreversematch-at
-# http://stackoverflow.com/questions/1779463/noreversematch-in-django
-
+#ValueError at /poll/1/sendemail/
+#Cannot assign "2L": "Users_Questions_Hash.voter" must be a "Users" instance.
