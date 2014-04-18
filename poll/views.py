@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-# from django.core.mail import send_email
+# from django.core.mail import send_mail
 from django.utils import timezone
 from django.forms import ModelForm
 from django.contrib import messages
@@ -64,18 +64,14 @@ def vote(request, poll_id):
 
 
 def sendemail(request, poll_id):
-    unames = Users.objects.filter(is_active=1)
-    p = get_object_or_404(Questions, pk=poll_id)
-    for name in unames:
-        uid = Users.objects.get(email_address=name)
-        rnum = random.randint(1,1000)
-        val = str(unames) + str(p) + str(rnum)
-        s = hashlib.sha1(val).hexdigest()
-#        e = Users_Questions_Hash(voter=int(uid.id), question=p.id, hash=s, isvalid=1) LOOK AT VOTER REFERENCE ABOVE
-        e = Users_Questions_Hash(voter=Users.objects.get(id=2), question=p.id, hash=s, isvalid=1)
-        e.save()
-
-    return HttpResponseRedirect(reverse('poll:index', args=(p.id,) ) )
+    users = Users.objects.filter(is_active=1) #put explicit email address call
+    question = get_object_or_404(Questions, pk=poll_id)
+    for user in users:        
+        salt = str(random.randint(1,1000))
+        token = u'%s:%s:%s' % (user.email_address, question.question_text, salt)
+        hashed_token = hashlib.sha1(token).hexdigest()
+        Users_Questions_Hash.objects.create(voter=user, question=question, hash_value=hashed_token, is_valid=1)
+    return HttpResponseRedirect(reverse('poll:index' ) )
 
 
 
