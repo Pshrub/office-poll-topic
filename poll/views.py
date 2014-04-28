@@ -1,16 +1,17 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-# from django.core.mail import send_mail
+from django.conf import settings
+from django.core.mail import send_mass_mail
 from django.utils import timezone
 from django.forms import ModelForm
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
 import hashlib
 import random
-#from random import randint
 from poll.models import Questions, Answers, Votes, Users, Users_Questions_Hash
 
-
+@permission_required('poll.can_send_poll_emails', login_url='/login')
 def index(request):
     recent_question_list = Questions.objects.all().order_by('-end_date')
     context = { 'recent_question_list': recent_question_list }
@@ -44,6 +45,7 @@ def results(request, poll_id):
     allvotes = get_list_or_404(Votes.objects.filter(answer_value_id__question_id__id=poll_id ) )
     return render(request, 'poll/results.html', {'allvotes': allvotes, 'allvotes2': allvotes2, 'poll': poll} )
 
+# in this method, use something like this: request.GET['token']
 def vote(request, poll_id):
     p = get_object_or_404(Questions, pk=poll_id)
     try:
@@ -58,22 +60,40 @@ def vote(request, poll_id):
     else:
         v = Votes(answer_value=selected_choice,voter=Users.objects.get(id=3),answer_timestamp=timezone.now() )
         v.save()
+        # below is the flash message.
         messages.add_message(request, messages.INFO, selected_choice)
     
     return HttpResponseRedirect(reverse('poll:results', args=(p.id,) ) )
 
-
-def sendemail(request, poll_id):
-    users = Users.objects.filter(is_active=1) #put explicit email address call
+# think about creating a template for the email and returning the template here. 
+# This would have the proper separation of business logic from the display logic.
+# instead of having the email specified below as text
+def sendEmail(request, poll_id): 
+    users = Users.objects.filter(is_active=1) 
     question = get_object_or_404(Questions, pk=poll_id)
     for user in users:        
-        salt = str(random.randint(1,1000))
+        salt = str(random.randint(1,10000))
         token = u'%s:%s:%s' % (user.email_address, question.question_text, salt)
         hashed_token = hashlib.sha1(token).hexdigest()
         Users_Questions_Hash.objects.create(voter=user, question=question, hash_value=hashed_token, is_valid=1)
+    
+    # use the send_mass_mail function, which queues up all the emails and only connects one time to send out the emails.
+    # https://docs.djangoproject.com/en/1.7/topics/email/#django.core.mail.send_mail
+    # could also use sendgrid (sendgrid.com). search for sendgrid smtp 
+
+    subject = 'Vote in this new poll!'
+    body = ('Vote in the latest poll. Here is the question'
+        'question.question_text'
+        'URL/hashed_token')
+    send_mass_mail(subject, body, settings.DEFAULT_FROM_EMAIL,  
+        ['pittfagan@gmail.com'] )
     return HttpResponseRedirect(reverse('poll:index' ) )
 
+# when i am in the context of the request, looking into request.get_host() to dynamically get the name and port,
+# can put this in the settings file.
+
+# http://127.0.0.1:8000/vote?token=W#$RTW#$RWSE$RAW#%$WS#$ER - this is an example of the URL
 
 
-#ValueError at /poll/1/sendemail/
-#Cannot assign "2L": "Users_Questions_Hash.voter" must be a "Users" instance.
+
+

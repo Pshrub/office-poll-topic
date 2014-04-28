@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     url('^poll/', include('poll.urls', namespace='poll') ),
     url(r'^admin/', include(admin.site.urls) ),
+    url(r'^login', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+    url(r'^logout', 'django.contrib.auth.views.logout'),
 )

@@ -7,6 +7,7 @@
     <p><strong>{{ error_message }}</strong></p>
 {% endif  %}
 
+<!-- pass along the token from the querystring, similar to the csrf_token. look into hidden inputs -->
 <form action="{% url 'poll:vote' poll.id %}" method="post">
 {% csrf_token  %}
 {% for answer in poll.answers_set.all  %}
