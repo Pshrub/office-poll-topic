@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.core.mail import send_mass_mail
+from django.core.mail import send_mail
 from django.utils import timezone
 from django.forms import ModelForm
 from django.contrib import messages
@@ -79,18 +79,20 @@ def sendEmail(request, poll_id):
     
     # use the send_mass_mail function, which queues up all the emails and only connects one time to send out the emails.
     # https://docs.djangoproject.com/en/1.7/topics/email/#django.core.mail.send_mail
-    # could also use sendgrid (sendgrid.com). search for sendgrid smtp 
+    # in the templates directory, add two files: email.html and email.txt.
+    # then look at this post: http://stackoverflow.com/questions/2809547/creating-email-templates-with-django
+    # or this: http://stackoverflow.com/questions/19970348/django-html-e-mail-template-doesnt-load-css-in-the-e-mail
 
-    subject = 'Vote in this new poll!'
-    body = ('Vote in the latest poll. Here is the question'
-        'question.question_text'
-        'URL/hashed_token')
-    send_mass_mail(subject, body, settings.DEFAULT_FROM_EMAIL,  
-        ['pittfagan@gmail.com'] )
+        subject = 'Vote in this new poll!'
+        body = ('Vote in the latest poll. Here is the question'
+            'question.question_text'
+            'URL/hashed_token')
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,  
+            [user.email_address] )
     return HttpResponseRedirect(reverse('poll:index' ) )
 
 # when i am in the context of the request, looking into request.get_host() to dynamically get the name and port,
-# can put this in the settings file.
+
 
 # http://127.0.0.1:8000/vote?token=W#$RTW#$RWSE$RAW#%$WS#$ER - this is an example of the URL
 
