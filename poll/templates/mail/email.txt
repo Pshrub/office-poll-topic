@@ -1,0 +1,10 @@
+Hello {{ firstname }},
+
+Click the link below to vote in the latest poll.
+
+Here is the question:
+
+{{ questiontext }}
+
+http://{{ tokenlink }}
+

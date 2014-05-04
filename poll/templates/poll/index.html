@@ -28,5 +28,11 @@
     <p>No polls exist yet</p>
 {% endif %}
 
+{% if messages %}
+    {% for message in messages %}
+    <h3{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</h3>
+    {% endfor %}
+{% endif %}
+
 {% endblock %}
 
